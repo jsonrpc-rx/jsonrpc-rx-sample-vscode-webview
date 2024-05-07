@@ -1,0 +1,33 @@
+{
+  "name": "jsonrpc-rx-sample-vscode-webview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "run-p dev:view-*",
+    "dev:extension": "pnpm run -F extension watch",
+    "dev:view-vue": "pnpm run -F view-vue watch",
+    "dev:view-react": "pnpm run -F view-react watch",
+    "clear": "run-s clear:* && rm -rf ./node_modules",
+    "clear:extension": "pnpm run -F extension clear",
+    "clear:view-vue": "pnpm run -F view-vue clear",
+    "clear:view-react": "pnpm run -F view-react clear",
+    "build": "run-s build:*",
+    "build:view-vue": "pnpm run -F view-vue build",
+    "build:view-react": "pnpm run -F view-react build",
+    "build:extension": "pnpm run -F extension compile",
+    "package": "pnpm run -F extension package"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.4",
+    "path-browserify": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/path-browserify": "^1.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.5"
+  }
+}
