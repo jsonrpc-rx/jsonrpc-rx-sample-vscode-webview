@@ -1,5 +1,5 @@
-import { workspace, commands, ExtensionContext } from 'vscode';
-import { asBehaviorSubject } from '@jsonrpc-rx/server';
+import { workspace, commands, ExtensionContext, window, TextDocument } from 'vscode';
+import { Publisher, asBehaviorSubject, asNotify, asSubject } from '@jsonrpc-rx/server';
 import { MessageService } from '../service/message.service';
 import { Deferred } from '../util/deferred';
 import { AxiosRequestConfig } from 'axios';
@@ -10,13 +10,21 @@ const axiosService = new AxiosService();
 
 export const getHandlers = (context: ExtensionContext) => {
   return {
+    // 关于 showMessage
+    ... {
+      showInformation: asNotify((message: string) => {
+        window.showInformationMessage(message);
+      })
+    },
     // 关于主题
     ...{
       getTheme: () => {
         return workspace.getConfiguration().get('workbench.colorTheme') as string;
       },
       setTheme: (theme: string) => {
-        workspace.getConfiguration().update('workbench.colorTheme', theme);
+        const { promise, resolve, reject } = new Deferred();
+        workspace.getConfiguration().update('workbench.colorTheme', theme).then(resolve, reject);
+        return promise;
       },
       onThemeChange: asBehaviorSubject(({ next }) => {
         const disposable = workspace.onDidChangeConfiguration(() => {
@@ -64,6 +72,15 @@ export const getHandlers = (context: ExtensionContext) => {
       axiosDelete: (url: string, config?: AxiosRequestConfig): Promise<any> => {
         return axiosService.delete(url, config);
       }
+    },
+    // 文档打开监听
+    ...{
+      onDidOpenTextDocument: asBehaviorSubject(({next}: Publisher<TextDocument>) => {
+        const disposable = workspace.onDidOpenTextDocument((file) => {
+          next(file);
+        })
+        return disposable.dispose.bind(disposable);
+      }, null),
     }
   };
 };

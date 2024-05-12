@@ -89,8 +89,8 @@ importers:
   packages/view-react:
     dependencies:
       '@jsonrpc-rx/client':
-        specifier: ^0.2.1
-        version: 0.2.1
+        specifier: ^0.2.2
+        version: 0.2.2
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -135,8 +135,8 @@ importers:
   packages/view-vue:
     dependencies:
       '@jsonrpc-rx/client':
-        specifier: ^0.2.1
-        version: 0.2.1
+        specifier: ^0.2.2
+        version: 0.2.2
       pinia:
         specifier: ^2.1.7
         version: 2.1.7(typescript@5.2.2)(vue@3.3.7)
@@ -740,8 +740,8 @@ packages:
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
 
-  /@jsonrpc-rx/client@0.2.1:
-    resolution: {integrity: sha512-QWlcCwN0bZiVlndQEc0yg5TZizgvJdmwxMh8vHDE5JY5HZqOPP0X5zhXBw3UCVMW1L9EY9ZnZpO2EWNIXrEhhg==}
+  /@jsonrpc-rx/client@0.2.2:
+    resolution: {integrity: sha512-SPVc+jpTRuGMDsmlOOWyI/xw0fMakmwKRsGasgPtsvNyrKRhnjFlkbPP8EW4I+s1dkx4deqh1WD//0VuSv/Kcw==}
     dependencies:
       '@jsonrpc-rx/core': 0.2.1
       flatted: 3.2.9

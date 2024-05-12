@@ -1,36 +1,50 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-import logPath from '@/assets/logo.svg'
-import { useWebviewPublicPath } from '@/hooks/use-webview-public-path'
-import { useVscTheme, vscColorThemeOptions } from '@/hooks/use-vsc-theme'
-import { useMessage } from '@/hooks/use-message'
-import { useHandlers } from '@/hooks/use-handlers'
+import { onMounted, ref } from 'vue';
+import { RouterLink, RouterView } from 'vue-router';
+import logPath from '@/assets/logo.svg';
+import { useWebviewPublicPath } from '@/hooks/use-webview-public-path';
+import { useVscTheme, vscColorThemeOptions } from '@/hooks/use-vsc-theme';
+import { useOnDidOpenTextDocument } from '@/hooks/use-on-did-open-text-document';
+import { useMessage } from '@/hooks/use-message';
+import { useHandlers } from '@/hooks/use-handlers';
 
 const handlers = useHandlers();
 // Webview 公共资源地址示例
-const logoUrl = useWebviewPublicPath(logPath)
+const logoUrl = useWebviewPublicPath(logPath);
 
 // Vscode 主题监听和设置示例
-const { theme, setTheme } = useVscTheme()
+const { theme, setTheme } = useVscTheme();
 const onColortThemeInput = () => {
-  setTimeout(() => setTheme(theme.value!))
-}
+  setTimeout(() => {
+    setTheme(theme.value!).catch((error: any) => {
+      handlers.showInformation(error.toString());
+    });
+  });
+};
 
 // 网络请求示例
-const whoami = ref()
+const whoami = ref();
 const onAxiosRequestClick = async () => {
-  const { data } = await handlers.axiosGet('https://developer.mozilla.org/api/v1/whoami')
-  whoami.value = data
-}
+  const { data } = await handlers.axiosGet('https://developer.mozilla.org/api/v1/whoami');
+  whoami.value = data;
+};
 
 // Webview 之间的通信演示例
-const messgeSend = ref('')
-const { message: messageRecevice, sendMessageToReact } = useMessage()
+const messgeSend = ref('');
+const { message: messageRecevice, sendMessageToReact } = useMessage();
 
 const onViewReactPanelOpen = () => {
-  handlers.execCommand('panel-view-container.show')
-}
+  handlers.execCommand('panel-view-container.show');
+};
+onMounted(() => {
+  onViewReactPanelOpen();
+});
+
+// 文件打开监听演示
+const fileName = ref('');
+useOnDidOpenTextDocument((file) => {
+  fileName.value = file.fileName;
+});
 </script>
 
 <template>
@@ -48,6 +62,10 @@ const onViewReactPanelOpen = () => {
         </option>
       </select>
       <div>当前窗口 vscode 的主题类型: {{ theme }}</div>
+    </div>
+    <div className="example-block">
+      <h2>文件打开监听演示</h2>
+      <div>最新打开的文件： {{ fileName }}</div>
     </div>
     <div class="example-block">
       <h2>Axios 服务测试演示</h2>
@@ -139,4 +157,3 @@ nav a:first-of-type {
   }
 }
 </style>
-./hooks/use-handlers@/hooks/use-vsc-theme

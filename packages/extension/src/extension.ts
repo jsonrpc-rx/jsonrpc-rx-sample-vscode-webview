@@ -18,7 +18,9 @@ export function activate(context: ExtensionContext) {
       'panel-view-container',
       'Panel View',
       ViewColumn.One,
-      {}
+      {
+        retainContextWhenHidden: true
+      }
     )
     viewProviderPanel.resolveWebviewView(panel)
   })

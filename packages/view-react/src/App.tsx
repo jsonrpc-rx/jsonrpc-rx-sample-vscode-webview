@@ -5,9 +5,10 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import { useMessage } from './hooks/use-message';
 import { useVscTheme, vscColorThemeOptions } from './hooks/use-vsc-theme';
+import { useOnDidOpenTextDocument } from './hooks/use-on-did-open-text-document';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [fileName, setFileName] = useState('');
 
   // Webview 公共资源地址示例
   const [reactLogoPath] = useWebviewPublicPath(reactLogo);
@@ -23,6 +24,11 @@ function App() {
     setTimeout(() => setTheme(newTheme));
   };
 
+  // 文件开启监视
+  useOnDidOpenTextDocument((file) => {
+    setFileName(file.fileName);
+  });
+
   return (
     <>
       <div>
@@ -34,14 +40,10 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="example-block">
+        <h2>文件打开监听演示</h2>
+        <div>最新打开的文件： {fileName}</div>
       </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-
       <div className="example-block">
         <h2>Webview 之间的通信演示</h2>
         <label htmlFor="webview-message-input">请输入消息：</label>
